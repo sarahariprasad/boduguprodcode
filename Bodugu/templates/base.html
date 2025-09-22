@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}My Website{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap 3 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <!-- Font Awesome (icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+
+
+
+    <style>
+        :root {
+            --site-bg: #fff;
+        }
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background-color: var(--site-bg);
+            padding-top: 15px; /* topbar (30px) + navbar (~30px) */
+        }
+
+        /* ===== Top blue bar ===== */
+        .topbar {
+            background: #00264d;
+            color: #fff;
+            font-size: 13px;
+            padding: 14px 15px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+            display: flex; /* make topbar flex */
+            justify-content: space-between; /* left & right items */
+            align-items: center;
+        }
+
+        .topbar .topbar-links {
+            display: flex;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+            gap: 20px;
+        }
+
+        .topbar .topbar-links li {
+            display: inline-flex;
+        }
+        .topbar a {
+            color: #fff;
+            text-decoration: none;
+        }
+        
+
+        /* ===== Main navbar sits below topbar ===== */
+        .main-navbar {
+            position: fixed;
+            top: 42px; /* height of topbar */
+            left: 0;
+            right: 0;
+            z-index: 1020;
+            margin-top: 0 !important;
+             padding: 12px 15px;
+        }
+
+        /* ===== Navbar Styling ===== */
+        .navbar {
+            background-color: var(--site-bg) !important;
+            font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+            border: none !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            background-image: none !important;
+            font-size: 12px;
+            font-weight: 400;
+            letter-spacing: 0.1px;
+        }
+        .navbar .navbar-brand {
+            display: flex;
+            align-items:  flex-start;
+            gap: 8px;
+            padding: 5px 15px;
+            font-family: Arial, Helvetica, sans-serif;
+            margin-top: 0; /* removed extra top margin */
+        }
+        .navbar-brand {
+            display: flex;
+            align-items: flex-start; /* aligns items at the top of the logo */
+            gap: 8px;
+            padding: 0px 15px;
+            font-family: Arial, Helvetica, sans-serif;
+            position: relative;
+        }
+
+        .navbar-brand .brand-logo {
+            height: 50px;
+            width: auto;
+            display: block;
+        }
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            top: 0; /* align top of text with logo */
+        }
+        .brand-title {
+            font-size: 30px;
+            font-weight: bold;
+            text-align: center;
+            color: #0161aa;
+            margin: 0; /* remove any default margin */
+            padding: 0;
+        }
+
+        .brand-subtitle {
+            font-size: 8px;
+            font-weight: bold;
+            text-align: center;
+            color: #0161aa;
+            letter-spacing: 0.3px;
+            margin: 0; /* remove default margin */
+            padding: 0;
+        }
+        @media (max-width: 600px) {
+            .brand-title { font-size: 16px; }
+            .brand-subtitle { font-size: 10px; }
+        }
+
+        .navbar .nav > li > a {
+            
+            color: #333 !important;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .navbar .nav > li > a:hover,
+        .navbar .nav > li.active > a {
+            color: #0073e6 !important;
+            background: transparent !important;
+        }
+        .navbar .nav > li > a::after {
+            content: "";
+            display: block;
+            width: 0;
+            height: 2px;
+            background: #0073e6;
+            transition: width 0.3s;
+            margin: 0 auto;
+        }
+        .navbar .nav > li > a:hover::after,
+        .navbar .nav > li.active > a::after {
+            width: 100%;
+        }
+        .navbar-toggle .icon-bar {
+            background-color: #111111;
+        }
+
+        /* ===== Donate Button ===== */
+        .donate-btn {
+            background-color: #7af7bd !important;
+            color: #fff !important;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+            padding: 6px 12px;      /* vertical | horizontal */
+            line-height: normal;     /* keep default for navbar alignment */
+            display: inline-block;
+            vertical-align: middle;  /* aligns with other navbar items */
+            text-align: center;
+            min-width: 80px;         /* optional */
+        }
+
+        .donate-btn:hover {
+            background-color: #6be3aa !important;
+            color: #fff;
+        }
+
+        /* ===== Dropdown styling ===== */
+        .navbar-nav > .dropdown > a:hover,
+        .navbar-nav > .dropdown.open > a {
+            color: #0073e6 !important;
+            background-color: #f1f5fb !important;
+        }
+        .navbar-nav > li > .dropdown-menu {
+            background: #fff;
+            border-radius: 0 0 6px 6px;
+            border: 1px solid #ddd;
+            box-shadow: 0 6px 12px rgba(0,0,0,.15);
+            min-width: 200px;
+            padding: 5px 0;
+        }
+        .navbar-nav > li > .dropdown-menu > li > a {
+            color: #333;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        .navbar-nav > li > .dropdown-menu > li > a:hover {
+            background: #02223d;
+            color: #fff;
+        }
+        @media (min-width: 768px) {
+            .navbar-nav > li.dropdown:hover > .dropdown-menu {
+                display: block;
+                margin-top: 0;
+                animation: fadeIn 0.3s ease-in-out;
+                
+            }
+            .topbar .topbar-links {
+            flex-direction: column; /* stack items on mobile */
+            align-items: center;
+            gap: 5px;
+            
+        }
+    }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+      
+
+        /* ===== WhatsApp floating button ===== */
+        .whatsapp-float {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #25d366;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+            z-index: 9999;
+            text-decoration: none;
+            animation: vibrate 2.2s linear infinite;
+        }
+        .whatsapp-float i { line-height: 1; }
+        .whatsapp-float::before,
+        .whatsapp-float::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 2px solid rgba(37, 211, 102, 0.5);
+            transform: scale(1);
+            opacity: 0;
+        }
+        .whatsapp-float::before { animation: wave 2s ease-out infinite; }
+        .whatsapp-float::after { animation: wave 2s ease-out infinite 1s; }
+        @keyframes vibrate {
+            0%,100% { transform: translate(0,0); }
+            25% { transform: translate(-1px, 1px); }
+            50% { transform: translate(1px, -1px); }
+            75% { transform: translate(-1px, -1px); }
+        }
+        @keyframes wave {
+            0% { transform: scale(1); opacity: 0.55; }
+            70% { transform: scale(1.9); opacity: 0.08; }
+            100% { transform: scale(2.2); opacity: 0; }
+        }
+
+        /* ===== Google Translate Floating ===== */
+        .translate-float {
+            position: fixed;
+            right: 20px;
+            bottom: 100px;
+            z-index: 9999;
+            background: #fff;
+            border-radius: 6px;
+            padding: 4px 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+        .goog-te-banner-frame.skiptranslate,
+        .goog-te-banner-frame {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+        }
+        .goog-te-gadget { font-size: 0; }
+        .goog-te-gadget select {
+            font-size: 14px;
+            padding: 3px 6px;
+        }
+        .goog-te-gadget span { display: none !important; }
+
+        /* Footer style starts */
+        footer.bg-primary {
+            background-color: #00264d;
+        }
+        .footer {
+                font-size: 12px;
+                line-height: 1.4;
+            }
+
+        .footer-title {
+                font-size: 16px;
+                font-weight: 500;
+                margin-bottom: 15px;
+                text-transform: uppercase;
+                border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+                display: inline-block;
+                padding-bottom: 5px;
+            }
+
+        .footer-text {
+                margin-bottom: 10px;
+            }
+
+        .footer-link {
+                color: #f8f9fa;
+                text-decoration: none;
+                transition: color 0.3s ease;
+            }
+
+        .footer-link:hover {
+                color: #ffd700;
+                text-decoration: underline;
+            }
+
+            /* Social Icons */
+        .social-icon {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                color: #fff;
+                font-size: 12px;
+                transition: all 0.3s ease;
+            }
+
+            .social-icon.facebook { background: #3b5998; }
+            .social-icon.instagram { background: #e4405f; }
+            .social-icon.twitter { background: #55acee; }
+            .social-icon.linkedin { background: #0077b5; }
+
+        .social-icon:hover {
+                transform: scale(1.1);
+                opacity: 0.85;
+            }
+
+            /* Footer Menu */
+         .footer-menu li {
+                margin-bottom: 6px;
+            }
+
+        .footer-bottom {
+                background-color: rgba(0, 0, 0, 0.25);
+                font-size: 12px;
+                margin-top: 15px;
+            }
+
+            /* Optional: reduce column padding even more */
+        .footer .row > [class*="col-"] {
+                padding-left: 8px;
+                padding-right: 8px;
+            }
+
+
+
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+<!-- 🔹 Top Contact Bar -->
+<div class="topbar">
+        <div class="topbar-left">
+            <i class="fa fa-envelope"></i> donorcare@bodugu.org
+        </div>
+        <div class="topbar-right">
+            <i class="fa fa-phone"></i> +91 9999999999
+        </div>
+</div>
+
+<!-- 🔹 Main Navbar -->
+<nav class="navbar navbar-default navbar-fixed-top main-navbar">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">
+                <img src="/media/images/bodugulogo-Picsart-BackgroundRemover.jpeg" alt="Bodugu Logo" class="brand-logo">
+                <div class="brand-text">
+                    <div class="brand-title">BODUGU</div>
+                    <div class="brand-subtitle">INTERNATIONAL FOUNDATION</div>
+                </div>
+            </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="main-navbar">
+            <ul class="nav navbar-nav navbar-right main-nav-links">
+                <li class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}"><a href="/"> Home</a></li>
+                <li class="dropdown {% if request.resolver_match.url_name in 'about_us board_of_trustees' %}active{% endif %}">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> What we are <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'about_us' %}">About Us</a></li>
+                        <li><a href="{% url 'board_of_trustees' %}">About Trustees</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown {% if request.resolver_match.url_name == 'area_detail' %}active{% endif %}">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Our Works <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        {% for area in areas %}
+                        <li><a href="{% url 'area_detail' area.slug %}">{{ area.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                <li class="{% if request.resolver_match.url_name == 'impact_categories' %}active{% endif %}">
+                    <a href="{% url 'impact_categories' %}"> Impact Stories </a>
+                </li>
+                <li class="dropdown {% if request.resolver_match.url_name in 'how_to_help campaign_list' %}active{% endif %}">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> How To Help <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'how_to_help' %}">How To Help</a></li>
+                        <li><a href="{% url 'campaign_list' %}">Campaigns</a></li>
+                    </ul>
+                </li>
+                <li class="{% if request.resolver_match.url_name in 'media media_detail' %}active{% endif %}">
+                    <a href="{% url 'media' %}"> Media</a>
+                </li>
+                <li class="{% if request.resolver_match.url_name in 'register' %}active{% endif %}">
+                    <a href="{% url 'register' %}"> Register</a>
+                </li>
+                <li class="tender-notice"><a href="{% url 'tender_notice_list' %}"> <i class="fa fa-bullhorn"></i> <span class="tender-text">Tender Notice</span></a></li>
+                <li><a href="{% url 'how_to_help' %}" class="donate-btn"><i class="fa fa-heart"></i> Donate</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- 🔹 MAIN CONTENT -->
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
+
+<!-- 🔹 Google Translate Floating -->
+<div id="google_translate_element" class="translate-float"></div>
+
+<!-- 🔹 WhatsApp Button -->
+<a href="https://wa.me/918555819227?text=Hello%20Trust,%20I%20want%20to%20donate."
+   class="whatsapp-float" target="_blank">
+   <i class="fa-brands fa-whatsapp"></i>
+</a>
+
+<!-- 🔹 FOOTER -->
+<footer class="footer bg-primary text-white pt-5">
+  <div class="container">
+    <div class="row gx-2 text-center text-md-left">
+      <!-- Get in Touch Column -->
+      <div class="col-md-4 mb-4">
+        <h5 class="footer-title">Get in Touch</h5>
+        <p class="footer-text">
+          PAVANA VARI KANDRIGA,<br>
+          KVB PURAM, TIRUPATI,<br>
+          Andhra Pradesh 517643, India
+        </p>
+        <p class="footer-text">
+          <strong>Email:</strong> 
+          <a href="mailto:contact@dquantumleap.com" class="footer-link">contact@dquantumleap.com</a><br>
+          <strong>Contact:</strong> +91 7997991265 &amp; +91 9441999414
+        </p>
+      </div>
+
+      <!-- Follow Us Column -->
+      <div class="col-md-4 mb-4">
+        <h5 class="footer-title">Follow Us</h5>
+        <div class="footer-social d-flex justify-content-center justify-content-md-start gap-2">
+          <a href="https://www.facebook.com/" target="_blank" class="social-icon facebook">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="https://www.instagram.com/" target="_blank" class="social-icon instagram">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="https://twitter.com/" target="_blank" class="social-icon twitter">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a href="https://www.linkedin.com/" target="_blank" class="social-icon linkedin">
+            <i class="fab fa-linkedin-in"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Menu Column -->
+      <div class="col-md-4 mb-4">
+        <h5 class="footer-title">Menu</h5>
+        <ul class="list-unstyled footer-menu">
+          <li><a href="#" class="footer-link">Home</a></li>
+          <li><a href="#" class="footer-link">About Us</a></li>
+          <li><a href="#" class="footer-link">Services</a></li>
+          <li><a href="#" class="footer-link">Contact</a></li>
+          <li><a href="#" class="footer-link">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Copyright -->
+  <div class="footer-bottom text-center py-3">
+    © 2025 Copyright:
+    <a class="footer-link fw-bold" href="#">YourWebsite.com</a>
+  </div>
+</footer>
+
+<!-- Custom CSS -->
+
+<style>
+  /* Prevent horizontal scrollbar */
+  html, body {
+    overflow-x: hidden;
+  }
+</style>
+
+<!-- Bootstrap JS + jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<!-- 🔹 Google Translate -->
+<script type="text/javascript">
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+      pageLanguage: 'en',
+      includedLanguages: 'en,te,hi,ta,ml',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+    }, 'google_translate_element');
+  }
+
+  function removeGoogleBanner() {
+    var iframe = document.querySelector('.goog-te-banner-frame');
+    if (iframe) { iframe.style.display = 'none'; }
+    var body = document.querySelector('body');
+    if (body) { body.style.top = '0px'; }
+  }
+  setInterval(removeGoogleBanner, 1000);
+
+  $(function(){
+    if ($(window).width() >= 768) {
+      $('ul.navbar-nav li.dropdown').hover(function() {
+        $(this).find('.dropdown-menu').stop(true, true).delay(100).fadeIn(200);
+      }, function() {
+        $(this).find('.dropdown-menu').stop(true, true).delay(100).fadeOut(200);
+      });
+    }
+  });
+</script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tenderLink = document.querySelector('.navbar-nav > li.tender-notice > a');
+    const tenderText = tenderLink.querySelector('.tender-text');
+    const tenderIcon = tenderLink.querySelector('i');
+
+    const colors = ['#ff0000', '#00ff00', '#0000ff', '#ff00ff'];
+    let i = 0;
+
+    setInterval(() => {
+        const color = colors[i];
+        tenderLink.style.color = color;        // fallback
+        if (tenderText) tenderText.style.color = color;  // text
+        if (tenderIcon) tenderIcon.style.color = color;  // icon
+        i = (i + 1) % colors.length;
+    }, 500);
+});
+</script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>
